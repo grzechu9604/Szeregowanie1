@@ -43,6 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTypes\Instance.cs" />
+    <Compile Include="DataTypes\TaskToSchedule.cs" />
+    <Compile Include="Helpers\InstanceReader.cs" />
+    <Compile Include="Helpers\FromStreamListReader.cs" />
+    <Compile Include="Helpers\TaskToScheduleReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
