@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Szeregowanie1.DataTypes;
 using Szeregowanie1.Helpers;
+using Szeregowanie1.Solvers;
 
 namespace Szeregowanie1
 {
@@ -23,8 +24,12 @@ namespace Szeregowanie1
                     instances.Add(instanceReader.ReadNext());
                 }
             }
-
-            instances.ForEach(i => Console.WriteLine(i.Length));
+            var solver = new InstanceSolver();
+            instances.ForEach(i =>
+            {
+                var si = solver.Solve(i, 0.2);
+                Console.WriteLine(si.Value);
+            });
         }
     }
 }

@@ -44,12 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataTypes\Instance.cs" />
+    <Compile Include="DataTypes\SolvedInstance.cs" />
     <Compile Include="DataTypes\TaskToSchedule.cs" />
+    <Compile Include="Helpers\GoalFunctionCalculator.cs" />
     <Compile Include="Helpers\InstanceReader.cs" />
     <Compile Include="Helpers\FromStreamListReader.cs" />
     <Compile Include="Helpers\TaskToScheduleReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Solvers\InstanceSolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
