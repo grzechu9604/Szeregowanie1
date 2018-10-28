@@ -30,12 +30,25 @@ namespace Szeregowanie1
                 }
             }
 
-            var solver = new InstanceSolver();
-            instances.ForEach(i =>
-            {
-                var si = solver.Solve(i, 0.2);
-                SolvedInstanceWriter.Write(si);
-            });
+            var verifier = new InstanceVerifier();
+
+            Verify("sch10_1_2.txt", verifier);
+            Verify("sch10_2_2.txt", verifier);
+            Verify("sch10_3_2.txt", verifier);
+            Verify("sch10_4_2.txt", verifier);
+            Verify("sch10_5_2.txt", verifier);
+            Verify("sch10_6_2.txt", verifier);
+            Verify("sch10_7_2.txt", verifier);
+            Verify("sch10_8_2.txt", verifier);
+            Verify("sch10_9_2.txt", verifier);
+            Verify("sch10_10_2.txt", verifier);
+
+        }
+
+        static void Verify(string fileName, InstanceVerifier verifier)
+        {
+            verifier.FileName = fileName;
+            Console.WriteLine(verifier.IsValid());
         }
     }
 }

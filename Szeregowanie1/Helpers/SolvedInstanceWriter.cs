@@ -15,15 +15,22 @@ namespace Szeregowanie1.Helpers
             string fileName = GenerateFileName(solvedInstance.Instance.FileNameWithoutExtension,
                 solvedInstance.Instance.K, solvedInstance.HParameter);
 
+            string output = GetOutput(solvedInstance);
+
             using (StreamWriter sr = new StreamWriter(fileName))
             {
-                string valuesToOutput = $"{solvedInstance.Value} {solvedInstance.StartTime}";
-
-                StringBuilder sb = new StringBuilder(valuesToOutput);
-                solvedInstance.TasksOrder.ForEach(t => sb.AppendFormat(" {0}", t.Index));
-
-                await sr.WriteLineAsync(sb.ToString());
+                await sr.WriteLineAsync(output);
             }
+        }
+
+        public static string GetOutput(SolvedInstance solvedInstance)
+        {
+            string valuesToOutput = $"{solvedInstance.Value} {solvedInstance.StartTime}";
+
+            StringBuilder sb = new StringBuilder(valuesToOutput);
+            solvedInstance.TasksOrder.ForEach(t => sb.AppendFormat(" {0}", t.Index));
+
+            return sb.ToString();
         }
 
         private static string GenerateFileName(string instanceFileName, int k, double h)
