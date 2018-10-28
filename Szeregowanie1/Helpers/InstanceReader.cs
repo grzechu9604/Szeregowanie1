@@ -7,8 +7,9 @@ namespace Szeregowanie1.Helpers
 {
     class InstanceReader
     {
+        public string FileNameWithoutExtension { get; set; }
         public StreamReader StreamReader { get; set; }
-        public Instance ReadNext()
+        public Instance ReadNext(int id)
         {
             var tasks = new List<TaskToSchedule>();
 
@@ -16,10 +17,15 @@ namespace Szeregowanie1.Helpers
             var taskReader = new TaskToScheduleReader() { StreamReader = StreamReader };
             for (int i = 0; i < amountOfTasks; i++)
             {
-                tasks.Add(taskReader.ReadNext());
+                tasks.Add(taskReader.ReadNext(i));
             }
 
-            return new Instance() { Tasks = tasks };
+            return new Instance()
+            {
+                Tasks = tasks,
+                K = id,
+                FileNameWithoutExtension = FileNameWithoutExtension
+            };
         }
     }
 }
