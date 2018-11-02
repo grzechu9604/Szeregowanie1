@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Szeregowanie1.DataTypes;
+using Szeregowanie1.Helpers;
 
 namespace Szeregowanie1.Solvers
 {
-    class InstanceSolver : IInstanceSolver
+    class BaseInstanceSolver : IInstanceSolver
     {
         public SolvedInstance Solve(Instance instance, double h)
         {
+            int dueTime = Convert.ToInt32(Math.Floor(instance.Length * h));
+
             var byCostForDelayDesc = instance.Tasks.OrderBy(t => t.CostForDelay).Select(t => t.Index).ToList();
             var byCostForLeadAsc = instance.Tasks.OrderByDescending(t => t.CostForLead).Select(t => t.Index).ToList();
 
@@ -30,10 +33,28 @@ namespace Szeregowanie1.Solvers
                     byCostForDelayDesc.ForEach(index => newOrder.Add(instance.Tasks.First(t => t.Index.Equals(index))));
                     byCostForDelayDesc.Clear();
                 }
-
             }
 
-            return new SolvedInstance(instance, newOrder, h, 0);
+            var bestStartTime = 0;
+            var bestValue = GoalFunctionCalculator.Calculate(bestStartTime, newOrder, dueTime);
+            bool isNewStartTimeBetter;
+
+            do
+            {
+                var newStartTime = bestStartTime + 1;
+                var newValue = GoalFunctionCalculator.Calculate(newStartTime, newOrder, dueTime);
+
+                isNewStartTimeBetter = newValue < bestValue;
+
+                if (isNewStartTimeBetter)
+                {
+                    bestStartTime = newStartTime;
+                    bestValue = newValue;
+                }
+
+            } while (isNewStartTimeBetter);
+            
+            return new SolvedInstance(instance, newOrder, h, bestStartTime);
         }
     }
 }

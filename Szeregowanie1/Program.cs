@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Szeregowanie1.DataTypes;
 using Szeregowanie1.Helpers;
 using Szeregowanie1.Solvers;
@@ -14,34 +16,58 @@ namespace Szeregowanie1
         {
             var veryfier = new InstanceVerifier();
 
-            Verify("sch10_1_2.txt", veryfier);
-            Verify("sch10_10_8.txt", veryfier);
-            Verify("sch50_2_2.txt", veryfier);
-            Verify("sch50_9_8.txt", veryfier);
-            Verify("sch1000_5_6.txt", veryfier);
+            var instances = new List<Instance>();
+            var fileNames = new List<string>
+            {
+                "sch10.txt", "sch50.txt", "sch1000.txt"
+            };
 
-            //var instances = new List<Instance>();
-            //string fileName = "sch10.txt";
+            fileNames.ForEach(fileName =>
+            {
+                using (var sr = new StreamReader(fileName))
+                {
+                    int instancesAmount = FromStreamListReader.ReadIntList(sr).First();
+                    var instanceReader = new InstanceReader()
+                    {
+                        StreamReader = sr,
+                        FileNameWithoutExtension = fileName.Split('.')[0]
+                    };
 
-            //using (var sr = new StreamReader(fileName))
-            //{
-            //    int instancesAmount = FromStreamListReader.ReadIntList(sr).First();
-            //    var instanceReader = new InstanceReader()
-            //    {
-            //        StreamReader = sr,
-            //        FileNameWithoutExtension = fileName.Split('.')[0]
-            //    };
+                    for (int i = 0; i < instancesAmount; i++)
+                    {
+                        instances.Add(instanceReader.ReadNext(i + 1));
+                    }
+                }
+            });
 
-            //    for (int i = 0; i < instancesAmount; i++)
-            //    {
-            //        instances.Add(instanceReader.ReadNext(i + 1));
-            //    }
-            //}
+            var solvers = new List<IInstanceSolver>
+            {
+                new BaseInstanceSolver(),
+                new NaiveInstanceSolver()
+            };
 
-            //var solver = new InstanceSolver();
+            var hList = new List<double>
+            {
+                0.2, 0.4, 0.6, 0.8
+            };
+
+            Parallel.ForEach(solvers, solver =>
+            {
+                instances.ForEach(i =>
+                {
+                    hList.ForEach(h =>
+                    {
+                        var stopwatch = new Stopwatch();
+                        stopwatch.Start();
+                        var result = solver.Solve(i, h);
+                        stopwatch.Stop();
+                        var elapsedTime = stopwatch.ElapsedTicks / (double)TimeSpan.TicksPerMillisecond;
+                        Console.WriteLine($"{i.K} {h} {solver.GetType()} rezultat: {result.Value} ms: {elapsedTime}");
+                    });
+                });
+            });
 
 
-            //var solvedInstance = solver.SolveAlg(instances.First(i => i.K.Equals(1)), 0.2);
             //SolvedInstanceWriter.Write(solvedInstance);
 
         }
