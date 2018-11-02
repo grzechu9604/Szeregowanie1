@@ -31,7 +31,7 @@ namespace Szeregowanie1.Solvers
             });
 
 
-            int startTime = dueTime - tasksBetterToDoBeforeDueTime.Sum(t => t.Length);
+            int startTime = dueTime - newOrder.Sum(t => t.Length);
 
             newOrder.AddRange(instance.Tasks
                 .Where(t => !newOrder.Contains(t))
