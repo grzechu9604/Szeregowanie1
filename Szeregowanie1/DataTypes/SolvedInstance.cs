@@ -7,7 +7,7 @@ using Szeregowanie1.Helpers;
 
 namespace Szeregowanie1.DataTypes
 {
-    class SolvedInstance
+    public class SolvedInstance
     {
         public Instance Instance { get; private set; }
         public int Value { get; private set; }

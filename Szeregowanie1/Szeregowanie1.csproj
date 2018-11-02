@@ -54,7 +54,9 @@
     <Compile Include="Helpers\TaskToScheduleReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Solvers\IInstanceSolver.cs" />
     <Compile Include="Solvers\InstanceSolver.cs" />
+    <Compile Include="Solvers\TestInstanceSolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

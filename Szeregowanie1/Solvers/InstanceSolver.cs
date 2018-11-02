@@ -7,14 +7,9 @@ using Szeregowanie1.DataTypes;
 
 namespace Szeregowanie1.Solvers
 {
-    class InstanceSolver
+    class InstanceSolver : IInstanceSolver
     {
         public SolvedInstance Solve(Instance instance, double h)
-        {
-            return new SolvedInstance(instance, instance.Tasks, h, 0);
-        }
-
-        public SolvedInstance SolveAlg(Instance instance, double h)
         {
             var byCostForDelayDesc = instance.Tasks.OrderBy(t => t.CostForDelay).Select(t => t.Index).ToList();
             var byCostForLeadAsc = instance.Tasks.OrderByDescending(t => t.CostForLead).Select(t => t.Index).ToList();
