@@ -12,36 +12,37 @@ namespace Szeregowanie1
     {
         static void Main(string[] args)
         {
-            var instances = new List<Instance>();
-            string fileName = "sch10.txt";
+            var veryfier = new InstanceVerifier();
 
-            using (var sr = new StreamReader(fileName))
-            {
-                int instancesAmount = FromStreamListReader.ReadIntList(sr).First();
-                var instanceReader = new InstanceReader()
-                {
-                    StreamReader = sr,
-                    FileNameWithoutExtension = fileName.Split('.')[0]
-                };
+            Verify("sch10_1_2.txt", veryfier);
+            Verify("sch10_10_8.txt", veryfier);
+            Verify("sch50_2_2.txt", veryfier);
+            Verify("sch50_9_8.txt", veryfier);
+            Verify("sch1000_5_6.txt", veryfier);
 
-                for (int i = 0; i < instancesAmount; i++)
-                {
-                    instances.Add(instanceReader.ReadNext(i + 1));
-                }
-            }
+            //var instances = new List<Instance>();
+            //string fileName = "sch10.txt";
 
-            var verifier = new InstanceVerifier();
+            //using (var sr = new StreamReader(fileName))
+            //{
+            //    int instancesAmount = FromStreamListReader.ReadIntList(sr).First();
+            //    var instanceReader = new InstanceReader()
+            //    {
+            //        StreamReader = sr,
+            //        FileNameWithoutExtension = fileName.Split('.')[0]
+            //    };
 
-            Verify("sch10_1_2.txt", verifier);
-            Verify("sch10_2_2.txt", verifier);
-            Verify("sch10_3_2.txt", verifier);
-            Verify("sch10_4_2.txt", verifier);
-            Verify("sch10_5_2.txt", verifier);
-            Verify("sch10_6_2.txt", verifier);
-            Verify("sch10_7_2.txt", verifier);
-            Verify("sch10_8_2.txt", verifier);
-            Verify("sch10_9_2.txt", verifier);
-            Verify("sch10_10_2.txt", verifier);
+            //    for (int i = 0; i < instancesAmount; i++)
+            //    {
+            //        instances.Add(instanceReader.ReadNext(i + 1));
+            //    }
+            //}
+
+            //var solver = new InstanceSolver();
+
+
+            //var solvedInstance = solver.SolveAlg(instances.First(i => i.K.Equals(1)), 0.2);
+            //SolvedInstanceWriter.Write(solvedInstance);
 
         }
 

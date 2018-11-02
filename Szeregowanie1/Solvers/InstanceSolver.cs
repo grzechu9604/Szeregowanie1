@@ -13,5 +13,32 @@ namespace Szeregowanie1.Solvers
         {
             return new SolvedInstance(instance, instance.Tasks, h, 0);
         }
+
+        public SolvedInstance SolveAlg(Instance instance, double h)
+        {
+            var byCostForDelayDesc = instance.Tasks.OrderBy(t => t.CostForDelay).Select(t => t.Index).ToList();
+            var byCostForLeadAsc = instance.Tasks.OrderByDescending(t => t.CostForLead).Select(t => t.Index).ToList();
+
+            var newOrder = new List<TaskToSchedule>();
+            while (byCostForLeadAsc.Any() || byCostForDelayDesc.Any())
+            {
+                if (newOrder.Sum(t => t.Length) < instance.Length * h)
+                {
+                    var first = byCostForLeadAsc.First();
+                    newOrder.Add(instance.Tasks.First(t => t.Index.Equals(first)));
+                    byCostForLeadAsc.Remove(first);
+                    byCostForDelayDesc.Remove(first);
+                }
+                else
+                {
+                    byCostForLeadAsc.Clear();
+                    byCostForDelayDesc.ForEach(index => newOrder.Add(instance.Tasks.First(t => t.Index.Equals(index))));
+                    byCostForDelayDesc.Clear();
+                }
+
+            }
+
+            return new SolvedInstance(instance, newOrder, h, 0);
+        }
     }
 }

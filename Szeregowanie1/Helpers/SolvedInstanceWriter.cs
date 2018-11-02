@@ -8,7 +8,7 @@ using Szeregowanie1.DataTypes;
 
 namespace Szeregowanie1.Helpers
 {
-    class SolvedInstanceWriter
+    static class SolvedInstanceWriter
     {
         public async static void Write(SolvedInstance solvedInstance)
         {

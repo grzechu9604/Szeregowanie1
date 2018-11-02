@@ -1,6 +1,6 @@
 ﻿namespace Szeregowanie1.DataTypes
 {
-    class TaskToSchedule
+    public class TaskToSchedule
     {
         public int Length { get; set; }
         public int CostForDelay { get; set; }

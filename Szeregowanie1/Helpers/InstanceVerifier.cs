@@ -30,7 +30,7 @@ namespace Szeregowanie1.Helpers
             var instanceToVerify = GetInstance(fileNameWithoutExtension, k);
 
             info.Wait();
-            var splittedInfo = info.Result.Split(' ');
+            var splittedInfo = info.Result.Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
             int declaredValue = Convert.ToInt32(splittedInfo[0]);
             int declaredStartTime = Convert.ToInt32(splittedInfo[1]);
 
