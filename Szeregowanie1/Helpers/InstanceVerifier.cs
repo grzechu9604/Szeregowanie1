@@ -34,6 +34,11 @@ namespace Szeregowanie1.Helpers
             int declaredValue = Convert.ToInt32(splittedInfo[0]);
             int declaredStartTime = Convert.ToInt32(splittedInfo[1]);
 
+            if (declaredStartTime < 0)
+            {
+                throw new Exception("Nie można zacząć zadania przed czasem 0!");
+            }
+
             List<int> indexesOrder = splittedInfo.Skip(2).Select(i => Convert.ToInt32(i)).ToList();
             var tasksOrder = PrepareTaskOrderLiest(indexesOrder, instanceToVerify.Tasks);
             var solvedInstance = new SolvedInstance(instanceToVerify, tasksOrder, h, declaredStartTime);

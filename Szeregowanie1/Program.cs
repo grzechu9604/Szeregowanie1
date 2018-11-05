@@ -63,6 +63,12 @@ namespace Szeregowanie1
                 0.2
             };
 
+            Console.WriteLine($"ilość zadań " +
+                            $"| F biblioteki " +
+                            $"| F obliczone " +
+                            $"| błąd %" +
+                            $"| t (ms)");
+
             Parallel.ForEach(solvers, solver =>
             {
                 instances.Where(i => i.K.Equals(10)).ToList().ForEach(i =>
@@ -83,7 +89,7 @@ namespace Szeregowanie1
                             $"| {upperBound} " +
                             $"| {result.Value} " +
                             $"| {mistakeRate}" +
-                            $"| ms: {elapsedTime}");
+                            $"| {elapsedTime}");
                     });
                 });
             });
