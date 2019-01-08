@@ -11,15 +11,42 @@ namespace Szeregowanie1.Helpers
     {
         private readonly List<SolvedInstance> _forbiddenInstances = new List<SolvedInstance>();
         private readonly int _tabuListMaxLength;
+        private readonly object _locker = new object();
 
         public TabuList(int maxTabuListLength)
         {
             _tabuListMaxLength = maxTabuListLength;
         }
 
-        public bool IsOnTabuList(SolvedInstance instance) => _forbiddenInstances.Any(i => i.Equals(instance));
+        public void Reset()
+        {
+            _forbiddenInstances.Clear();
+        }
 
-        public void AddToTabuList(SolvedInstance instance)
+        public bool IsOnTabuList(SolvedInstance instance)
+        {
+            if (_forbiddenInstances.Contains(instance))
+            {
+                return true;
+            }
+            else
+            {
+                lock(_locker)
+                {
+                    if (_forbiddenInstances.Contains(instance))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        AddToTabuList(instance);
+                        return false;
+                    }
+                }
+            }
+        }
+
+        private void AddToTabuList(SolvedInstance instance)
         {
             if (_forbiddenInstances.Count > 0)
             {
