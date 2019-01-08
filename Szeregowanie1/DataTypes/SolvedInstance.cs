@@ -18,6 +18,11 @@ namespace Szeregowanie1.DataTypes
 
         public SolvedInstance(Instance instance, List<TaskToSchedule> tasksOrder, double h, int startTime)
         {
+            if (startTime < 0)
+            {
+                throw new Exception("Zaczął przed 0!");
+            }
+
             Instance = instance;
             HParameter = h;
             DueTime = (int)(HParameter * Instance.Length);

@@ -14,7 +14,7 @@ namespace Szeregowanie1.Helpers
             tabuList = new TabuList(maxTabuListLength);
             Generators = new List<Func<SolvedInstance, double, int, SolvedInstance>>()
             {
-                TriangleOrderGenerator, RandomGenerator, TriangleOrderGenerator, RandomGenerator
+                TriangleOrderGenerator, RandomGenerator, TriangleOrderGenerator, TriangleOrderWithRandomSmallChangeGenerator, TriangleOrderWithRandomSmallChangeWithOrderByGenerator
             };
         }
 
@@ -52,7 +52,7 @@ namespace Szeregowanie1.Helpers
         {
             int dueTime = solved.DueTime;
 
-            var threshold = new Random().NextDouble();
+            var threshold = RandomHelper.GetRandomDouble();
             var tasksToDoBeforeDueTime = solved.Instance.Tasks.Where(task => Math.Abs(Guid.NewGuid().GetHashCode()) / (double)int.MaxValue > threshold).ToList();
 
             int startTime = Math.Max(0, dueTime - tasksToDoBeforeDueTime.Sum(task => task.Length));
@@ -82,37 +82,76 @@ namespace Szeregowanie1.Helpers
             }
         }
 
-        //private SolvedInstance TriangleOrderWithStartTimeChangeGenerator(SolvedInstance solved, double h, int maxDepth)
-        //{
-        //    int dueTime = solved.DueTime;
+        private SolvedInstance TriangleOrderWithRandomSmallChangeGenerator(SolvedInstance solved, double h, int maxDepth)
+        {
+            int dueTime = solved.DueTime;
 
-        //    var threshold = new Random().NextDouble();
-        //    var tasksToDoBeforeDueTime = solved.Instance.Tasks.Where(task => Math.Abs(Guid.NewGuid().GetHashCode()) / (double)int.MaxValue > threshold).ToList();
+            int smallRandom = RandomHelper.GetRandomInt(10);
+            var tasksToAddToBeforeListDueTime = solved.GetLateTasks().OrderBy(t => Guid.NewGuid().GetHashCode()).Take(smallRandom);
 
-        //    int startTime = Math.Max(0, dueTime - tasksToDoBeforeDueTime.Sum(task => task.Length));
+            var tasksToDoBeforeDueTime = solved.GetEarlyTasks();
+            tasksToDoBeforeDueTime.AddRange(tasksToAddToBeforeListDueTime);
 
-        //    var newOrder = new List<TaskToSchedule>();
-        //    int currentTime = startTime;
-        //    while (tasksToDoBeforeDueTime.Any() && (currentTime + tasksToDoBeforeDueTime.First().Length) <= dueTime)
-        //    {
-        //        newOrder.Add(tasksToDoBeforeDueTime.First());
-        //        tasksToDoBeforeDueTime.RemoveAt(0);
-        //    }
-        //    newOrder = newOrder.OrderBy(task => task.CostForLead).ToList();
-        //    var tasksToDoAfterDueTime = solved.Instance.Tasks.Except(newOrder);
-        //    newOrder.AddRange(tasksToDoAfterDueTime.OrderByDescending(task => task.CostForDelay));
+            int startTime = Math.Max(0, dueTime - tasksToDoBeforeDueTime.Sum(task => task.Length));
 
-        //    var newInstance = new SolvedInstance(solved.Instance, newOrder, h, startTime);
-        //    var manipulatedStartTimeInstance = ManipulateStartTime(newInstance);
-        //    if (tabuList.IsOnTabuList(manipulatedStartTimeInstance) && maxDepth-- > 0)
-        //    {
-        //        return TriangleOrderGenerator(solved, h, maxDepth);
-        //    }
-        //    else
-        //    {
-        //        return manipulatedStartTimeInstance;
-        //    }
-        //}
+            var newOrder = new List<TaskToSchedule>();
+            int currentTime = startTime;
+            while (tasksToDoBeforeDueTime.Any() && (currentTime + tasksToDoBeforeDueTime.First().Length) <= dueTime)
+            {
+                newOrder.Add(tasksToDoBeforeDueTime.First());
+                tasksToDoBeforeDueTime.RemoveAt(0);
+            }
+            newOrder = newOrder.OrderBy(task => task.CostForLead).ToList();
+            var tasksToDoAfterDueTime = solved.Instance.Tasks.Except(newOrder);
+            newOrder.AddRange(tasksToDoAfterDueTime.OrderByDescending(task => task.CostForDelay));
+
+            var newInstance = new SolvedInstance(solved.Instance, newOrder, h, startTime);
+            var manipulatedStartTimeInstance = ManipulateStartTime(newInstance);
+            if (tabuList.IsOnTabuList(manipulatedStartTimeInstance) && maxDepth-- > 0)
+            {
+                return TriangleOrderGenerator(solved, h, maxDepth);
+            }
+            else
+            {
+                return manipulatedStartTimeInstance;
+            }
+        }
+
+        private SolvedInstance TriangleOrderWithRandomSmallChangeWithOrderByGenerator(SolvedInstance solved, double h, int maxDepth)
+        {
+            int dueTime = solved.DueTime;
+
+            int smallRandom = RandomHelper.GetRandomInt(10);
+            var tasksToAddToBeforeListDueTime = solved.GetLateTasks().OrderBy(t => Guid.NewGuid().GetHashCode()).Take(smallRandom);
+
+            var tasksToDoBeforeDueTime = solved.GetEarlyTasks();
+            tasksToDoBeforeDueTime.AddRange(tasksToAddToBeforeListDueTime);
+            tasksToDoBeforeDueTime = tasksToDoBeforeDueTime.OrderByDescending(t => t.CostForLead).ToList();
+
+            int startTime = Math.Max(0, dueTime - tasksToDoBeforeDueTime.Sum(task => task.Length));
+
+            var newOrder = new List<TaskToSchedule>();
+            int currentTime = startTime;
+            while (tasksToDoBeforeDueTime.Any() && (currentTime + tasksToDoBeforeDueTime.First().Length) <= dueTime)
+            {
+                newOrder.Add(tasksToDoBeforeDueTime.First());
+                tasksToDoBeforeDueTime.RemoveAt(0);
+            }
+            newOrder.Reverse();
+            var tasksToDoAfterDueTime = solved.Instance.Tasks.Except(newOrder);
+            newOrder.AddRange(tasksToDoAfterDueTime.OrderByDescending(task => task.CostForDelay));
+
+            var newInstance = new SolvedInstance(solved.Instance, newOrder, h, startTime);
+            var manipulatedStartTimeInstance = ManipulateStartTime(newInstance);
+            if (tabuList.IsOnTabuList(manipulatedStartTimeInstance) && maxDepth-- > 0)
+            {
+                return TriangleOrderGenerator(solved, h, maxDepth);
+            }
+            else
+            {
+                return manipulatedStartTimeInstance;
+            }
+        }
 
         //private SolvedInstance ThirdGenerator(SolvedInstance solved, double h, int maxDepth)
         //{
