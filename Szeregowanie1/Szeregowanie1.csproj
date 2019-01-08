@@ -50,7 +50,9 @@
     <Compile Include="Helpers\InstanceReader.cs" />
     <Compile Include="Helpers\FromStreamListReader.cs" />
     <Compile Include="Helpers\InstanceVerifier.cs" />
+    <Compile Include="Helpers\RandomInstanceCreator.cs" />
     <Compile Include="Helpers\SolvedInstanceWriter.cs" />
+    <Compile Include="Helpers\TabuList.cs" />
     <Compile Include="Helpers\TaskToScheduleReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

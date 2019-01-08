@@ -25,5 +25,24 @@ namespace Szeregowanie1.DataTypes
             StartTime = startTime;
             Value = GoalFunctionCalculator.Calculate(StartTime, TasksOrder, DueTime);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is SolvedInstance && (obj as SolvedInstance).StartTime.Equals(StartTime))
+            {
+                for (int i = 0; i < TasksOrder.Count; i++)
+                {
+                    if (!TasksOrder[i].Index.Equals((obj as SolvedInstance).TasksOrder[i].Index))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return base.Equals(obj);
+            }
+        }
     }
 }
