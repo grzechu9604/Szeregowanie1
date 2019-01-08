@@ -12,7 +12,7 @@ namespace Szeregowanie1.Solvers
     class SimulatedAnnealingSolver : IInstanceSolver
     {
         public int TabuListLength { get; set; } = 1000;
-        public int MaxTimeOfProcessingInSeconds { get; set; } = 30;
+        public int MaxTimeOfProcessingInSeconds { get; set; } = 60;
         public int MaxAmountOfFailedLoops { get; set; } = 1000;
 
         public SolvedInstance Solve(Instance instance, double h)
@@ -31,12 +31,10 @@ namespace Szeregowanie1.Solvers
         {
             var tabuList = new TabuList(TabuListLength);
 
-            var stopwatch = new Stopwatch();
-
             var bestSolution = beginningSolution;
 
-            stopwatch.Start();
-            while (stopwatch.Elapsed.Seconds < MaxTimeOfProcessingInSeconds)
+            var start = DateTime.Now;
+            while (DateTime.Now.Subtract(start).TotalSeconds < MaxTimeOfProcessingInSeconds)
             {
                 SolvedInstance newSolution = RandomInstanceCreator.Generate(beginningSolution.Instance, h);
 

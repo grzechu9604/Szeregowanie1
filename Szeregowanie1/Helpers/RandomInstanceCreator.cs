@@ -11,7 +11,7 @@ namespace Szeregowanie1.Helpers
     {
         public static List<Func<Instance, double, SolvedInstance>> Generators = new List<Func<Instance, double, SolvedInstance>>()
         {
-            FirstGenerator, SecondGenerator
+            FirstGenerator, SecondGenerator, FirstGenerator, SecondGenerator
         };
 
         public static SolvedInstance Generate(Instance instance, double h)
@@ -28,7 +28,7 @@ namespace Szeregowanie1.Helpers
 
         private static SolvedInstance SecondGenerator(Instance instance, double h)
         {
-            return new SolvedInstance(instance, instance.Tasks.OrderBy(t => new Guid()).ToList(), h, 0);
+            return new SolvedInstance(instance, instance.Tasks.OrderBy(t => Guid.NewGuid()).ToList(), h, 0);
         }
 
         private static SolvedInstance FirstGenerator(Instance instance, double h)

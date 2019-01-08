@@ -99,10 +99,10 @@ namespace Szeregowanie1
                             $"| t (s)" +
                             $"| heurystyka lepsza o (%)");
 
-            Solve("sch10", 0.2, instances, upperBounds);
+           // Solve("sch10", 0.2, instances, upperBounds);
             //Solve("sch100", 0.4, instances, upperBounds);
-            //Solve("sch500", 0.6, instances, upperBounds);
-            //Solve("sch1000", 0.8, instances, upperBounds);
+            Solve("sch500", 0.6, instances, upperBounds);
+            Solve("sch1000", 0.8, instances, upperBounds);
         }
 
         static void Solve(string filePath, double h, List<Instance> instances, Dictionary<Tuple<int, double, int>, int> upperBounds)
