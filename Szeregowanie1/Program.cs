@@ -26,7 +26,7 @@ namespace Szeregowanie1
                 { new Tuple<int, double, int>(10, 0.2, 8), 1720 },
                 { new Tuple<int, double, int>(10, 0.2, 9), 1574 },
                 { new Tuple<int, double, int>(10, 0.2, 10), 1869 },
-                { new Tuple<int, double, int>(100, 0.4, 1), 89588       },
+                { new Tuple<int, double, int>(100, 0.4, 1), 89588},
                 { new Tuple<int, double, int>(100, 0.4, 2), 74854       },
                 { new Tuple<int, double, int>(100, 0.4, 3), 85363       },
                 { new Tuple<int, double, int>(100, 0.4, 4), 87730       },
@@ -89,73 +89,51 @@ namespace Szeregowanie1
             {
                 new NaiveInstanceSolver()
             };
-            
+
             var hList = new List<double>
             {
                 0.2
             };
 
+            Solve("sch10", 0.2, instances, upperBounds);
+            Console.Clear();
+
             Console.WriteLine($"ilość zadań " +
                             $"| K" +
                             $"| F biblioteki " +
-                            $"| F obliczone " +
+                            $"| F obliczone (naive) " +
+                            $"| błąd %" +
+                            $"| t (s)" +
+                            $"| F obliczone (heur) " +
                             $"| błąd %" +
                             $"| t (s)");
-            Solve("sch10", 0.2, instances, upperBounds);
-            Console.Clear();
 
             Solve("sch10", 0.2, instances, upperBounds);
             Solve("sch100", 0.4, instances, upperBounds);
             Solve("sch500", 0.6, instances, upperBounds);
             Solve("sch1000", 0.8, instances, upperBounds);
-
-            //Parallel.ForEach(solvers, solver =>
-            //{
-            //    instances.ToList().ForEach(i =>
-            //    {
-            //        hList.ForEach(h =>
-            //        {
-            //            var stopwatch = new Stopwatch();
-            //            stopwatch.Start();
-            //            var result = solver.Solve(i, h);
-            //            stopwatch.Stop();
-            //            var elapsedTime = stopwatch.ElapsedTicks / (double)TimeSpan.TicksPerMillisecond;
-            //            var upperBound = upperBounds[new Tuple<int, double, int>(i.Tasks.Count, h, i.K)];
-            //            double mistakeRate = (result.Value - upperBound) / (double)upperBound;
-
-            //            SolvedInstanceWriter.Write(result);
-
-            //            Console.WriteLine($"{i.Tasks.Count} " +
-            //                $"| {i.K} " +
-            //                $"| {upperBound} " +
-            //                $"| {result.Value} " +
-            //                $"| {mistakeRate}" +
-            //                $"| {elapsedTime}");
-            //        });
-            //    });
-            //});
-
-            ////var toVerifyList = new List<string>
-            ////{
-            ////    "sch10_10_2.txt", "sch20_10_2.txt", "sch50_10_2.txt", "sch100_10_2.txt", "sch200_10_2.txt", "sch500_10_2.txt", "sch1000_10_2.txt"
-            //};
-
-            //var verifier = new InstanceVerifier();
-            //toVerifyList.ForEach(file => Verify(file, verifier));
         }
 
         static void Solve(string filePath, double h, List<Instance> instances, Dictionary<Tuple<int, double, int>, int> upperBounds)
         {
             var solver = new NaiveInstanceSolver();
+            var heuristicSolver = new SimulatedAnnealingSolver();
             instances.Where(i => i.FileNameWithoutExtension.Equals(filePath)).ToList().ForEach(i =>
             {
                 var stopwatch = new Stopwatch();
+
                 stopwatch.Start();
                 var result = solver.Solve(i, h);
                 stopwatch.Stop();
                 var elapsedTime = stopwatch.ElapsedTicks / (double)TimeSpan.TicksPerMillisecond;
                 var upperBound = upperBounds[new Tuple<int, double, int>(i.Tasks.Count, h, i.K)];
-                double mistakeRate = (result.Value - upperBound) / (double)upperBound *100;
+                double mistakeRate = (result.Value - upperBound) / (double)upperBound * 100;
+
+                stopwatch.Start();
+                var resultHeuristic = heuristicSolver.Solve(i, h);
+                stopwatch.Stop();
+                var elapsedTimeHeuristic = stopwatch.ElapsedTicks / (double)TimeSpan.TicksPerMillisecond;
+                double mistakeRateHeuristic = (resultHeuristic.Value - upperBound) / (double)upperBound * 100;
 
                 SolvedInstanceWriter.Write(result);
 
@@ -164,9 +142,11 @@ namespace Szeregowanie1
                         $"| {upperBound} " +
                         $"| {result.Value} " +
                         $"| {mistakeRate}" +
-                        $"| {elapsedTime}");
+                        $"| {elapsedTime}" +
+                        $"| {resultHeuristic.Value} " +
+                        $"| {mistakeRateHeuristic}" +
+                        $"| {elapsedTimeHeuristic}");
             });
-
         }
 
         static void Verify(string fileName, InstanceVerifier verifier)
