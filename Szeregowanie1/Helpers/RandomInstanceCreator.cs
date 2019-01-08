@@ -18,11 +18,6 @@ namespace Szeregowanie1.Helpers
             };
         }
 
-        public void ResetTabuList()
-        {
-            tabuList.Reset();
-        }
-
         private readonly TabuList tabuList;
         public List<Func<SolvedInstance, double, int, SolvedInstance>> Generators;
         private const int MaxDepth = 1000;
@@ -42,13 +37,14 @@ namespace Szeregowanie1.Helpers
         private SolvedInstance RandomGenerator(SolvedInstance solved, double h, int maxDepth)
         {
             var newInstance = new SolvedInstance(solved.Instance, solved.Instance.Tasks.OrderBy(t => Guid.NewGuid()).ToList(), h, 0);
-            if (tabuList.IsOnTabuList(newInstance) && maxDepth-- > 0)
+            var manipulatedStartTimeInstance = ManipulateStartTime(newInstance);
+            if (tabuList.IsOnTabuList(manipulatedStartTimeInstance) && maxDepth-- > 0)
             {
                 return RandomGenerator(solved, h, maxDepth);
             }
             else
             {
-                return newInstance;
+                return manipulatedStartTimeInstance;
             }
         }
 
@@ -73,13 +69,14 @@ namespace Szeregowanie1.Helpers
             newOrder.AddRange(tasksToDoAfterDueTime.OrderByDescending(task => task.CostForDelay));
 
             var newInstance = new SolvedInstance(solved.Instance, newOrder, h, startTime);
-            if (tabuList.IsOnTabuList(newInstance) && maxDepth-- > 0)
+            var manipulatedStartTimeInstance = ManipulateStartTime(newInstance);
+            if (tabuList.IsOnTabuList(manipulatedStartTimeInstance) && maxDepth-- > 0)
             {
                 return TriangleOrderGenerator(solved, h, maxDepth);
             }
             else
             {
-                return newInstance;
+                return manipulatedStartTimeInstance;
             }
         }
 
@@ -114,5 +111,40 @@ namespace Szeregowanie1.Helpers
         //        tasksOrderedByCostForDelay.FirstOrDefault()
         //    }
         //}
+
+        private SolvedInstance ManipulateStartTime(SolvedInstance instance)
+        {
+            var firstInstance = ManipulateStartTimeIncrementing(instance);
+            var secondInstance = ManipulateStartTimeDecrementing(instance);
+
+            return firstInstance.Value < secondInstance.Value ? firstInstance : secondInstance;
+        }
+
+        private SolvedInstance ManipulateStartTimeIncrementing(SolvedInstance instance)
+        {
+            var newInstance = new SolvedInstance(instance.Instance, instance.TasksOrder, instance.HParameter, instance.StartTime + 1);
+            if (newInstance.Value < instance.Value)
+            {
+                return ManipulateStartTimeIncrementing(newInstance);
+            }
+            else
+            {
+                return instance;
+            }
+        }
+
+        private SolvedInstance ManipulateStartTimeDecrementing(SolvedInstance instance)
+        {
+            if (instance.StartTime > 0)
+            {
+                var newInstance = new SolvedInstance(instance.Instance, instance.TasksOrder, instance.HParameter, instance.StartTime - 1);
+                if (newInstance.Value < instance.Value)
+                {
+                    return ManipulateStartTimeIncrementing(newInstance);
+                }
+            }
+
+            return instance;
+        }
     }
 }
