@@ -44,5 +44,39 @@ namespace Szeregowanie1.DataTypes
                 return base.Equals(obj);
             }
         }
+
+        public List<TaskToSchedule> GetLateTasks()
+        {
+            int time = StartTime;
+            var lateTasks = new List<TaskToSchedule>();
+
+            foreach (var task in TasksOrder)
+            {
+                time += task.Length;
+
+                if (time >= DueTime)
+                {
+                    lateTasks.Add(task);
+                }
+            }
+            return lateTasks;
+        }
+
+        public List<TaskToSchedule> GetEarlyTasks()
+        {
+            int time = StartTime;
+            var earlyTasks = new List<TaskToSchedule>();
+
+            foreach (var task in TasksOrder)
+            {
+                time += task.Length;
+
+                if (time < DueTime)
+                {
+                    earlyTasks.Add(task);
+                }
+            }
+            return earlyTasks;
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace Szeregowanie1.Solvers
 {
     class SimulatedAnnealingSolver : IInstanceSolver
     {
-        public int TabuListLength { get; set; } = 1000;
+        public int TabuListLength { get; set; } = 10000;
         public int MaxTimeOfProcessingInSeconds { get; set; } = 5;
 
         public SolvedInstance Solve(Instance instance, double h)
