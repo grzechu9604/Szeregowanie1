@@ -56,7 +56,6 @@ namespace Szeregowanie1
                 { new Tuple<int, double, int>(1000, 0.8, 8), 6069658 },
                 { new Tuple<int, double, int>(1000, 0.8, 9), 6188416 },
                 { new Tuple<int, double, int>(1000, 0.8, 10), 6147295 }
-
             };
 
             var veryfier = new InstanceVerifier();
@@ -89,15 +88,15 @@ namespace Szeregowanie1
             Console.Clear();
 
             Console.WriteLine($"ilość zadań " +
-                            $"| K" +
-                            $"| F biblioteki " +
-                            $"| F obliczone (naive) " +
-                            $"| błąd %" +
-                            $"| t (s)" +
-                            $"| F obliczone (heur) " +
-                            $"| błąd %" +
-                            $"| t (s)" +
-                            $"| heurystyka lepsza o (%)");
+                            $"\t K" +
+                            $"\t F biblioteki " +
+                            $"\t F obliczone (naive) " +
+                            $"\t błąd %" +
+                            $"\t t (s)" +
+                            $"\t F obliczone (heur) " +
+                            $"\t błąd %" +
+                            $"\t t (s)" +
+                            $"\t heurystyka lepsza o (%)");
 
             //Solve("sch10", 0.2, instances, upperBounds);
             Solve("sch100", 0.4, instances, upperBounds);
@@ -108,7 +107,7 @@ namespace Szeregowanie1
         static void Solve(string filePath, double h, List<Instance> instances, Dictionary<Tuple<int, double, int>, int> upperBounds)
         {
             var solver = new NaiveInstanceSolver();
-            var heuristicSolver = new SimulatedAnnealingSolver();
+            var heuristicSolver = new TabuSearchSolver();
             instances.Where(i => i.FileNameWithoutExtension.Equals(filePath)).ToList().ForEach(i =>
             {
                 var stopwatch = new Stopwatch();
@@ -130,15 +129,15 @@ namespace Szeregowanie1
                 SolvedInstanceWriter.Write(result);
 
                 Console.WriteLine($"{i.Tasks.Count} " +
-                        $"| {i.K} " +
-                        $"| {upperBound} " +
-                        $"| {result.Value} " +
-                        $"| {mistakeRate}" +
-                        $"| {elapsedTime}" +
-                        $"| {resultHeuristic.Value} " +
-                        $"| {mistakeRateHeuristic}" +
-                        $"| {elapsedTimeHeuristic}" +
-                        $"| {mistakeRate - mistakeRateHeuristic}");
+                        $"\t {i.K} " +
+                        $"\t {upperBound} " +
+                        $"\t {result.Value} " +
+                        $"\t {mistakeRate}" +
+                        $"\t {elapsedTime}" +
+                        $"\t {resultHeuristic.Value} " +
+                        $"\t {mistakeRateHeuristic}" +
+                        $"\t {elapsedTimeHeuristic}" +
+                        $"\t {mistakeRate - mistakeRateHeuristic}");
             });
         }
 

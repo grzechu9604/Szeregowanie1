@@ -60,7 +60,7 @@
     <Compile Include="Solvers\IInstanceSolver.cs" />
     <Compile Include="Solvers\InstanceSolver.cs" />
     <Compile Include="Solvers\NaiveInstanceSolver.cs" />
-    <Compile Include="Solvers\SimulatedAnnealingSolver.cs" />
+    <Compile Include="Solvers\TabuSearchSolver.cs" />
     <Compile Include="Solvers\TestInstanceSolver.cs" />
   </ItemGroup>
   <ItemGroup>

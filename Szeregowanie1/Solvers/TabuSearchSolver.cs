@@ -4,15 +4,17 @@ using Szeregowanie1.Helpers;
 
 namespace Szeregowanie1.Solvers
 {
-    class SimulatedAnnealingSolver : IInstanceSolver
+    class TabuSearchSolver : IInstanceSolver
     {
         public int TabuListLength { get; set; } = 10000;
         public int MaxTimeOfProcessingInSeconds { get; set; } = 50;
 
+        public int MaxStepsWithoutImprovement { get; set; } = 15; 
+
         public SolvedInstance Solve(Instance instance, double h)
         {
             var beginningSolution = CreateStartingPoint(instance, h);
-            return SolveUsingSimulatedAnnealing(beginningSolution, h);
+            return SolveUsingTabuSearch(beginningSolution, h);
         }
 
         private SolvedInstance CreateStartingPoint(Instance instance, double h)
@@ -21,19 +23,32 @@ namespace Szeregowanie1.Solvers
             return naiveSolver.Solve(instance, h);
         }
 
-        public SolvedInstance SolveUsingSimulatedAnnealing(SolvedInstance beginningSolution, double h)
+        public SolvedInstance SolveUsingTabuSearch(SolvedInstance beginningSolution, double h)
         {
             var instanceCreator = new RandomInstanceCreator(TabuListLength);
             var bestSolution = beginningSolution;
+            var currentSolution = bestSolution;
 
+            int stepsWithoutImprovement = 0;
             var start = DateTime.Now;
             while (DateTime.Now.Subtract(start).TotalSeconds < MaxTimeOfProcessingInSeconds)
             {
-                SolvedInstance newSolution = instanceCreator.Generate(bestSolution, h);
+                currentSolution = instanceCreator.Generate(currentSolution, h);
 
-                if (newSolution.Value < bestSolution.Value)
+                if (currentSolution.Value < bestSolution.Value)
                 {
-                    bestSolution = newSolution;
+                    bestSolution = currentSolution;
+                    stepsWithoutImprovement = 0;
+                }
+                else
+                {
+                    stepsWithoutImprovement++;
+                }
+
+                if (stepsWithoutImprovement > MaxStepsWithoutImprovement)
+                {
+                    stepsWithoutImprovement = 0;
+                    currentSolution = bestSolution;
                 }
             }
 
