@@ -88,17 +88,17 @@ namespace Szeregowanie1
             Console.Clear();
 
             Console.WriteLine($"ilość zadań " +
-                            $"\t K" +
-                            $"\t F biblioteki " +
-                            $"\t F obliczone (naive) " +
-                            $"\t błąd %" +
-                            $"\t t (s)" +
-                            $"\t F obliczone (heur) " +
-                            $"\t błąd %" +
-                            $"\t t (s)" +
-                            $"\t heurystyka lepsza o (%)");
+                            $"| K" +
+                            $"| F biblioteki " +
+                            $"| F obliczone (naive) " +
+                            $"| błąd %" +
+                            $"| t (s)" +
+                            $"| F obliczone (heur) " +
+                            $"| błąd %" +
+                            $"| t (s)" +
+                            $"| heurystyka lepsza o (%)");
 
-            //Solve("sch10", 0.2, instances, upperBounds);
+            Solve("sch10", 0.2, instances, upperBounds);
             Solve("sch100", 0.4, instances, upperBounds);
             Solve("sch500", 0.6, instances, upperBounds);
             Solve("sch1000", 0.8, instances, upperBounds);
@@ -129,15 +129,15 @@ namespace Szeregowanie1
                 SolvedInstanceWriter.Write(result);
 
                 Console.WriteLine($"{i.Tasks.Count} " +
-                        $"\t {i.K} " +
-                        $"\t {upperBound} " +
-                        $"\t {result.Value} " +
-                        $"\t {mistakeRate}" +
-                        $"\t {elapsedTime}" +
-                        $"\t {resultHeuristic.Value} " +
-                        $"\t {mistakeRateHeuristic}" +
-                        $"\t {elapsedTimeHeuristic}" +
-                        $"\t {mistakeRate - mistakeRateHeuristic}");
+                        $"| {i.K} " +
+                        $"| {upperBound} " +
+                        $"| {result.Value} " +
+                        $"| {mistakeRate}" +
+                        $"| {elapsedTime}" +
+                        $"| {resultHeuristic.Value} " +
+                        $"| {mistakeRateHeuristic}" +
+                        $"| {elapsedTimeHeuristic}" +
+                        $"| {mistakeRate - mistakeRateHeuristic}");
             });
         }
 
