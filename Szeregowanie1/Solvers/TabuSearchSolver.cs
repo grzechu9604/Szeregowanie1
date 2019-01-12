@@ -6,10 +6,10 @@ namespace Szeregowanie1.Solvers
 {
     class TabuSearchSolver : IInstanceSolver
     {
-        public int TabuListLength { get; set; } = 10000;
-        public int MaxTimeOfProcessingInSeconds { get; set; } = 50;
+        public int TabuListLength { get; set; } = 500;
+        public int MaxTimeOfProcessingInSeconds { get; set; } = 55;
 
-        public int MaxStepsWithoutImprovement { get; set; } = 12; 
+        public int MaxStepsWithoutImprovement { get; set; } = 15; 
 
         public SolvedInstance Solve(Instance instance, double h)
         {

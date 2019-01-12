@@ -46,6 +46,7 @@
     <Compile Include="DataTypes\Instance.cs" />
     <Compile Include="DataTypes\SolvedInstance.cs" />
     <Compile Include="DataTypes\TaskToSchedule.cs" />
+    <Compile Include="Helpers\ConsoleAndFileWriter.cs" />
     <Compile Include="Helpers\GoalFunctionCalculator.cs" />
     <Compile Include="Helpers\InstanceReader.cs" />
     <Compile Include="Helpers\FromStreamListReader.cs" />

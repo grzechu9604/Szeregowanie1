@@ -83,28 +83,31 @@ namespace Szeregowanie1
                     }
                 }
             });
-            
-            //Solve("sch10", 0.2, instances, upperBounds);
+
+            //Solve("sch10", 0.2, instances, upperBounds, true);
             Console.Clear();
 
-            Console.WriteLine($"ilość zadań " +
-                            $"| K" +
-                            $"| F biblioteki " +
-                            $"| F obliczone (naive) " +
-                            $"| błąd %" +
-                            $"| t (s)" +
-                            $"| F obliczone (heur) " +
-                            $"| błąd %" +
-                            $"| t (s)" +
-                            $"| heurystyka lepsza o (%)");
+            for (int i = 0; i < 3; i++)
+            {
+                ConsoleAndFileWriter.WriteLine($"ilość zadań " +
+                $"| K" +
+                $"| F biblioteki " +
+                $"| F obliczone (naive) " +
+                $"| błąd %" +
+                $"| t (s)" +
+                $"| F obliczone (heur) " +
+                $"| błąd %" +
+                $"| t (s)" +
+                $"| heurystyka lepsza o (%)");
 
-            Solve("sch10", 0.2, instances, upperBounds);
-            Solve("sch100", 0.4, instances, upperBounds);
-            Solve("sch500", 0.6, instances, upperBounds);
-            Solve("sch1000", 0.8, instances, upperBounds);
+                Solve("sch10", 0.2, instances, upperBounds);
+                Solve("sch100", 0.4, instances, upperBounds);
+                Solve("sch500", 0.6, instances, upperBounds);
+                Solve("sch1000", 0.8, instances, upperBounds);
+            }
         }
 
-        static void Solve(string filePath, double h, List<Instance> instances, Dictionary<Tuple<int, double, int>, int> upperBounds)
+        static void Solve(string filePath, double h, List<Instance> instances, Dictionary<Tuple<int, double, int>, int> upperBounds, bool isTest = false)
         {
             var solver = new NaiveInstanceSolver();
             var heuristicSolver = new TabuSearchSolver();
@@ -126,18 +129,21 @@ namespace Szeregowanie1
                 var elapsedTimeHeuristic = stopwatch.ElapsedTicks / (double)TimeSpan.TicksPerMillisecond;
                 double mistakeRateHeuristic = (resultHeuristic.Value - upperBound) / (double)upperBound * 100;
 
-                SolvedInstanceWriter.Write(result);
+                if (!isTest)
+                {
+                    SolvedInstanceWriter.Write(result);
 
-                Console.WriteLine($"{i.Tasks.Count} " +
-                        $"| {i.K} " +
-                        $"| {upperBound} " +
-                        $"| {result.Value} " +
-                        $"| {mistakeRate}" +
-                        $"| {elapsedTime}" +
-                        $"| {resultHeuristic.Value} " +
-                        $"| {mistakeRateHeuristic}" +
-                        $"| {elapsedTimeHeuristic}" +
-                        $"| {mistakeRate - mistakeRateHeuristic}");
+                    ConsoleAndFileWriter.WriteLine($"{i.Tasks.Count} " +
+                            $"| {i.K} " +
+                            $"| {upperBound} " +
+                            $"| {result.Value} " +
+                            $"| {mistakeRate}" +
+                            $"| {elapsedTime}" +
+                            $"| {resultHeuristic.Value} " +
+                            $"| {mistakeRateHeuristic}" +
+                            $"| {elapsedTimeHeuristic}" +
+                            $"| {mistakeRate - mistakeRateHeuristic}");
+                }
             });
         }
 

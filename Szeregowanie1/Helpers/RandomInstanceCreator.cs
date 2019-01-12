@@ -41,7 +41,7 @@ namespace Szeregowanie1.Helpers
 
         private SolvedInstance RandomGenerator(SolvedInstance solved, double h, int maxDepth)
         {
-            var newInstance = new SolvedInstance(solved.Instance, solved.Instance.Tasks.OrderBy(t => Guid.NewGuid()).ToList(), h, 0);
+            var newInstance = new SolvedInstance(solved.Instance, solved.Instance.Tasks.OrderBy(t => RandomHelper.GetRandomInt()).ToList(), h, 0);
             var manipulatedStartTimeInstance = ManipulateStartTime(newInstance);
             if (tabuList.IsOnTabuList(manipulatedStartTimeInstance) && maxDepth-- > 0)
             {
@@ -58,7 +58,7 @@ namespace Szeregowanie1.Helpers
             int dueTime = solved.DueTime;
 
             var threshold = RandomHelper.GetRandomDouble();
-            var tasksToDoBeforeDueTime = solved.Instance.Tasks.Where(task => Math.Abs(Guid.NewGuid().GetHashCode()) / (double)int.MaxValue > threshold).ToList();
+            var tasksToDoBeforeDueTime = solved.Instance.Tasks.Where(task => RandomHelper.GetRandomDouble() > threshold).ToList();
 
             int startTime = Math.Max(0, dueTime - tasksToDoBeforeDueTime.Sum(task => task.Length));
 
@@ -92,7 +92,7 @@ namespace Szeregowanie1.Helpers
             int dueTime = solved.DueTime;
 
             int smallRandom = RandomHelper.GetRandomInt(MaxSmallChange);
-            var tasksToAddToBeforeListDueTime = solved.GetLateTasks().OrderBy(t => Guid.NewGuid().GetHashCode()).Take(smallRandom);
+            var tasksToAddToBeforeListDueTime = solved.GetLateTasks().OrderBy(t => RandomHelper.GetRandomInt()).Take(smallRandom);
 
             var tasksToDoBeforeDueTime = solved.GetEarlyTasks();
             tasksToDoBeforeDueTime.AddRange(tasksToAddToBeforeListDueTime);
@@ -114,7 +114,7 @@ namespace Szeregowanie1.Helpers
             var manipulatedStartTimeInstance = ManipulateStartTime(newInstance);
             if (tabuList.IsOnTabuList(manipulatedStartTimeInstance) && maxDepth-- > 0)
             {
-                return TriangleOrderGenerator(solved, h, maxDepth);
+                return TriangleOrderWithRandomSmallChangeGenerator(solved, h, maxDepth);
             }
             else
             {
@@ -127,7 +127,7 @@ namespace Szeregowanie1.Helpers
             int dueTime = solved.DueTime;
 
             int smallRandom = RandomHelper.GetRandomInt(MinMediumChange, MaxMediumChange);
-            var tasksToAddToBeforeListDueTime = solved.GetLateTasks().OrderBy(t => Guid.NewGuid().GetHashCode()).Take(smallRandom);
+            var tasksToAddToBeforeListDueTime = solved.GetLateTasks().OrderBy(t => RandomHelper.GetRandomInt()).Take(smallRandom);
 
             var tasksToDoBeforeDueTime = solved.GetEarlyTasks();
             tasksToDoBeforeDueTime.AddRange(tasksToAddToBeforeListDueTime);
@@ -149,7 +149,7 @@ namespace Szeregowanie1.Helpers
             var manipulatedStartTimeInstance = ManipulateStartTime(newInstance);
             if (tabuList.IsOnTabuList(manipulatedStartTimeInstance) && maxDepth-- > 0)
             {
-                return TriangleOrderGenerator(solved, h, maxDepth);
+                return TriangleOrderWithRandomMediumChangeGenerator(solved, h, maxDepth);
             }
             else
             {
@@ -161,8 +161,8 @@ namespace Szeregowanie1.Helpers
         {
             int dueTime = solved.DueTime;
 
-            int smallRandom = RandomHelper.GetRandomInt(10);
-            var tasksToAddToBeforeListDueTime = solved.GetLateTasks().OrderBy(t => Guid.NewGuid().GetHashCode()).Take(smallRandom);
+            int smallRandom = RandomHelper.GetRandomInt(MaxSmallChange);
+            var tasksToAddToBeforeListDueTime = solved.GetLateTasks().OrderBy(t => RandomHelper.GetRandomInt()).Take(smallRandom);
 
             var tasksToDoBeforeDueTime = solved.GetEarlyTasks();
             tasksToDoBeforeDueTime.AddRange(tasksToAddToBeforeListDueTime);
@@ -185,7 +185,7 @@ namespace Szeregowanie1.Helpers
             var manipulatedStartTimeInstance = ManipulateStartTime(newInstance);
             if (tabuList.IsOnTabuList(manipulatedStartTimeInstance) && maxDepth-- > 0)
             {
-                return TriangleOrderGenerator(solved, h, maxDepth);
+                return TriangleOrderWithRandomSmallChangeWithOrderByGenerator(solved, h, maxDepth);
             }
             else
             {
@@ -236,7 +236,7 @@ namespace Szeregowanie1.Helpers
         private SolvedInstance ManipulateStartTimeIncrementing(SolvedInstance instance)
         {
             var newInstance = new SolvedInstance(instance.Instance, instance.TasksOrder, instance.HParameter, instance.StartTime + 1);
-            if (newInstance.Value < instance.Value)
+            if (newInstance.Value <= instance.Value)
             {
                 return ManipulateStartTimeIncrementing(newInstance);
             }
@@ -251,7 +251,7 @@ namespace Szeregowanie1.Helpers
             if (instance.StartTime > 0)
             {
                 var newInstance = new SolvedInstance(instance.Instance, instance.TasksOrder, instance.HParameter, instance.StartTime - 1);
-                if (newInstance.Value < instance.Value)
+                if (newInstance.Value <= instance.Value)
                 {
                     return ManipulateStartTimeIncrementing(newInstance);
                 }

@@ -24,5 +24,10 @@ namespace Szeregowanie1.Helpers
         {
             return _random.Next(max);
         }
+
+        public static int GetRandomInt()
+        {
+            return _random.Next();
+        }
     }
 }
