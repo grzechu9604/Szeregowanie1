@@ -26,26 +26,46 @@ namespace Szeregowanie1
                 { new Tuple<int, double, int>(10, 0.2, 8), 1720 },
                 { new Tuple<int, double, int>(10, 0.2, 9), 1574 },
                 { new Tuple<int, double, int>(10, 0.2, 10), 1869 },
+                { new Tuple<int, double, int>(50, 0.4, 1), 24868 },
+                { new Tuple<int, double, int>(50, 0.4, 2), 19279 },
+                { new Tuple<int, double, int>(50, 0.4, 3), 21353 },
+                { new Tuple<int, double, int>(50, 0.4, 4), 17495 },
+                { new Tuple<int, double, int>(50, 0.4, 5), 18441 },
+                { new Tuple<int, double, int>(50, 0.4, 6), 21497 },
+                { new Tuple<int, double, int>(50, 0.4, 7), 23883 },
+                { new Tuple<int, double, int>(50, 0.4, 8), 25402 },
+                { new Tuple<int, double, int>(50, 0.4, 9), 21929 },
+                { new Tuple<int, double, int>(50, 0.4, 10), 20048 },
                 { new Tuple<int, double, int>(100, 0.4, 1), 89588},
-                { new Tuple<int, double, int>(100, 0.4, 2), 74854       },
-                { new Tuple<int, double, int>(100, 0.4, 3), 85363       },
-                { new Tuple<int, double, int>(100, 0.4, 4), 87730       },
-                { new Tuple<int, double, int>(100, 0.4, 5), 76424       },
-                { new Tuple<int, double, int>(100, 0.4, 6), 86724       },
-                { new Tuple<int, double, int>(100, 0.4, 7), 79854       },
-                { new Tuple<int, double, int>(100, 0.4, 8), 95361       },
-                { new Tuple<int, double, int>(100, 0.4, 9), 73605       },
-                { new Tuple<int, double, int>(100, 0.4, 10), 72399       },
-                { new Tuple<int, double, int>(500, 0.6, 1), 1581233        },
-                { new Tuple<int, double, int>(500, 0.6, 2), 1715332        },
-                { new Tuple<int, double, int>(500, 0.6, 3), 1644947        },
-                { new Tuple<int, double, int>(500, 0.6, 4), 1640942        },
-                { new Tuple<int, double, int>(500, 0.6, 5), 1468325        },
-                { new Tuple<int, double, int>(500, 0.6, 6), 1413345        },
-                { new Tuple<int, double, int>(500, 0.6, 7), 1634912        },
-                { new Tuple<int, double, int>(500, 0.6, 8), 1542090        },
-                { new Tuple<int, double, int>(500, 0.6, 9), 1684055        },
-                { new Tuple<int, double, int>(500, 0.6, 10), 1520515        },
+                { new Tuple<int, double, int>(100, 0.4, 2), 74854},
+                { new Tuple<int, double, int>(100, 0.4, 3), 85363},
+                { new Tuple<int, double, int>(100, 0.4, 4), 87730},
+                { new Tuple<int, double, int>(100, 0.4, 5), 76424},
+                { new Tuple<int, double, int>(100, 0.4, 6), 86724},
+                { new Tuple<int, double, int>(100, 0.4, 7), 79854},
+                { new Tuple<int, double, int>(100, 0.4, 8), 95361},
+                { new Tuple<int, double, int>(100, 0.4, 9), 73605},
+                { new Tuple<int, double, int>(100, 0.4, 10), 72399},
+                { new Tuple<int, double, int>(200, 0.6, 1), 254268},
+                { new Tuple<int, double, int>(200, 0.6, 2), 266028},
+                { new Tuple<int, double, int>(200, 0.6, 3), 254647},
+                { new Tuple<int, double, int>(200, 0.6, 4), 297269},
+                { new Tuple<int, double, int>(200, 0.6, 5), 260455},
+                { new Tuple<int, double, int>(200, 0.6, 6), 236160},
+                { new Tuple<int, double, int>(200, 0.6, 7), 247555},
+                { new Tuple<int, double, int>(200, 0.6, 8), 225572},
+                { new Tuple<int, double, int>(200, 0.6, 9), 255029},
+                { new Tuple<int, double, int>(200, 0.6, 10), 269236},
+                { new Tuple<int, double, int>(500, 0.6, 1), 1581233},
+                { new Tuple<int, double, int>(500, 0.6, 2), 1715332},
+                { new Tuple<int, double, int>(500, 0.6, 3), 1644947},
+                { new Tuple<int, double, int>(500, 0.6, 4), 1640942},
+                { new Tuple<int, double, int>(500, 0.6, 5), 1468325},
+                { new Tuple<int, double, int>(500, 0.6, 6), 1413345},
+                { new Tuple<int, double, int>(500, 0.6, 7), 1634912},
+                { new Tuple<int, double, int>(500, 0.6, 8), 1542090},
+                { new Tuple<int, double, int>(500, 0.6, 9), 1684055},
+                { new Tuple<int, double, int>(500, 0.6, 10), 1520515},
                 { new Tuple<int, double, int>(1000, 0.8, 1), 6411581 },
                 { new Tuple<int, double, int>(1000, 0.8, 2), 6112598 },
                 { new Tuple<int, double, int>(1000, 0.8, 3), 5985538 },
@@ -63,7 +83,7 @@ namespace Szeregowanie1
             var instances = new List<Instance>();
             var fileNames = new List<string>
             {
-                "sch10.txt", "sch100.txt", "sch500.txt", "sch1000.txt"
+                 "sch50.txt", "sch200.txt"
             };
 
             fileNames.ForEach(fileName =>
@@ -87,7 +107,7 @@ namespace Szeregowanie1
             //Solve("sch10", 0.2, instances, upperBounds, true);
             Console.Clear();
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 1; i++)
             {
                 ConsoleAndFileWriter.WriteLine($"ilość zadań " +
                 $"| K" +
@@ -100,10 +120,8 @@ namespace Szeregowanie1
                 $"| t (s)" +
                 $"| heurystyka lepsza o (%)");
 
-                Solve("sch10", 0.2, instances, upperBounds);
-                Solve("sch100", 0.4, instances, upperBounds);
-                Solve("sch500", 0.6, instances, upperBounds);
-                Solve("sch1000", 0.8, instances, upperBounds);
+                Solve("sch50", 0.4, instances, upperBounds);
+                Solve("sch200", 0.6, instances, upperBounds);
             }
         }
 
