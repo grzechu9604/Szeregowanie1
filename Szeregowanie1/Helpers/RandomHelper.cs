@@ -8,26 +8,39 @@ namespace Szeregowanie1.Helpers
 {
     static class RandomHelper
     {
-        private static Random _random = new Random(0);
+        private static readonly Random _random = new Random(1);
+        private static readonly object _lock = new object();
         
         public static double GetRandomDouble()
         {
-            return _random.NextDouble();
+            lock(_lock)
+            {
+                return _random.NextDouble();
+            }
         }
 
         public static int GetRandomInt(int min, int max)
         {
-            return _random.Next(min, max);
+            lock (_lock)
+            {
+                return _random.Next(min, max);
+            }
         }
 
         public static int GetRandomInt(int max)
         {
-            return _random.Next(max);
+            lock (_lock)
+            {
+                return _random.Next(max);
+            }
         }
 
         public static int GetRandomInt()
         {
-            return _random.Next();
+            lock (_lock)
+            {
+                return _random.Next();
+            }
         }
     }
 }
