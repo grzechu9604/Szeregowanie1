@@ -9,7 +9,7 @@ namespace Szeregowanie1.Solvers
         public int TabuListLength { get; set; } = 500;
         public int MaxTimeOfProcessingInSeconds { get; set; } = 55;
 
-        public int MaxStepsWithoutImprovement { get; set; } = 15; 
+        public int MaxStepsWithoutImprovement { get; set; } = 30; 
 
         public SolvedInstance Solve(Instance instance, double h)
         {

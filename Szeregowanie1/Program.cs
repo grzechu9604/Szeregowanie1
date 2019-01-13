@@ -83,7 +83,7 @@ namespace Szeregowanie1
             var instances = new List<Instance>();
             var fileNames = new List<string>
             {
-                 "sch50.txt", "sch200.txt"
+                 "sch10.txt", "sch20.txt","sch50.txt", "sch100.txt", "sch200.txt", "sch500.txt", "sch1000.txt"
             };
 
             fileNames.ForEach(fileName =>
@@ -120,8 +120,10 @@ namespace Szeregowanie1
                 $"| t (s)" +
                 $"| heurystyka lepsza o (%)");
 
+                Solve("sch10", 0.2, instances, upperBounds);
                 Solve("sch50", 0.4, instances, upperBounds);
                 Solve("sch200", 0.6, instances, upperBounds);
+                Solve("sch1000", 0.8, instances, upperBounds);
             }
         }
 
@@ -149,7 +151,7 @@ namespace Szeregowanie1
 
                 if (!isTest)
                 {
-                    SolvedInstanceWriter.Write(result);
+                    SolvedInstanceWriter.Write(resultHeuristic);
 
                     ConsoleAndFileWriter.WriteLine($"{i.Tasks.Count} " +
                             $"| {i.K} " +
